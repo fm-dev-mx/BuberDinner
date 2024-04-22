@@ -7,5 +7,5 @@ Content-Type: application/json
     "firstName": "Francisco",
     "lastName": "Mendoza",
     "email": "francisco.mendoza@example.com",
-    "password": "MyPassword123!"
+    "password": "MySecretKey1234!MySecretKey1234!"
 }
