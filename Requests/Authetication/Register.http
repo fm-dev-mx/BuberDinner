@@ -7,5 +7,5 @@ Content-Type: application/json
     "firstName": "Francisco",
     "lastName": "Mendoza",
     "email": "francisco.mendoza@example.com",
-    "password": "super-secret-key-from-user-secrets"
+    "password": "super-secret-password"
 }
