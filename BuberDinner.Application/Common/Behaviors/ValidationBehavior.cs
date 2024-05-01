@@ -1,22 +1,34 @@
 using BuberDinner.Application.Authentication.Commands.Register;
 using BuberDinner.Application.Authentication.Common;
 using ErrorOr;
+using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
 
-namespace BuberDinner.Api.Common.Behaviors;
+namespace BuberDinner.Application.Common.Behaviors;
 
 public class ValidateRegisterCommandBehavior : IPipelineBehavior<RegisterCommand, ErrorOr<AuthenticationResult>>
 {
-    public async Task<ErrorOr<AuthenticationResult>> Handle(
-        RegisterCommand request,
-        RequestHandlerDelegate<ErrorOr<AuthenticationResult>> next,
-        CancellationToken cancellationToken
-        )
-    {
-        // before the handler runs
-        var result = await next();
-        // after the handler runs
+    private readonly IValidator<RegisterCommand> _validator;
 
-        return result;
+    public ValidateRegisterCommandBehavior(IValidator<RegisterCommand> validator)
+    {
+        _validator = validator;
+    }
+
+    public async Task<ErrorOr<AuthenticationResult>> Handle( RegisterCommand request,
+        RequestHandlerDelegate<ErrorOr<AuthenticationResult>> next, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        if (validationResult.IsValid) return await next();
+
+        var errors = validationResult.Errors
+            .ConvertAll(ValidationFailure => Error.Validation(
+                ValidationFailure.PropertyName,
+                ValidationFailure.ErrorMessage))
+            .ToList();
+
+        return errors;
     }
 }
