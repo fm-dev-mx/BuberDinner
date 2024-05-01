@@ -11,14 +11,10 @@ namespace BuberDinner.Api.Common.Errors;
 public class BuberDinnerProblemDetailsFactory : ProblemDetailsFactory
 {
     private readonly ApiBehaviorOptions _options;
-    private readonly Action<ProblemDetailsContext>? _configure;
 
-    public BuberDinnerProblemDetailsFactory(
-        IOptions<ApiBehaviorOptions> options,
-        IOptions<ProblemDetailsOptions>? problemDetailsOptions = null)
+    public BuberDinnerProblemDetailsFactory(IOptions<ApiBehaviorOptions> options)
     {
         _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
-        _configure = problemDetailsOptions?.Value?.CustomizeProblemDetails;
     }
 
     public override ProblemDetails CreateProblemDetails(
