@@ -23,6 +23,12 @@ var app = builder.Build();
     // Enforce HTTPS to improve security by redirecting HTTP requests to HTTPS.
     app.UseHttpsRedirection();
 
+    // Adds authentication middleware to the application pipeline, enabling authentication for incoming requests.
+    app.UseAuthentication();
+
+    // Integrates the authorization middleware to enforce security policies on endpoints, ensuring only authorized access based on predefined rules.
+    app.UseAuthorization();
+
     // Map controller routes to make them available as HTTP endpoints.
     app.MapControllers();
 

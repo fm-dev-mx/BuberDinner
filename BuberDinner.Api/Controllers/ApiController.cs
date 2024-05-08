@@ -1,12 +1,14 @@
 using BuberDinner.Api.Common.Http;
 using ErrorOr;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BuberDinner.Api.Controllers;
 
-// Base controller class that provides common functionalities for error handling.
+// Base controller class that provides common functionalities for error handling across all controllers in the application.
 [ApiController]
+[Authorize] // Ensures that all actions within the derived controllers require authorization.
 public class ApiController : ControllerBase
 {
     // Handles a list of errors by determining the appropriate response based on error type.

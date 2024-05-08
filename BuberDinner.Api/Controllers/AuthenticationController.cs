@@ -6,11 +6,16 @@ using BuberDinner.Domain.Common.Errors;
 using ErrorOr;
 using MapsterMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BuberDinner.Api.Controllers;
 
+// Endpoints for user authentication.
+// The authentication process involves registering a new user or logging in with an existing account.
 [Route("auth")]
+// Allows anonymous access to authentication endpoints.
+[AllowAnonymous]
 public class AuthenticationController : ApiController
 {
     // Dependency injection for MediatR and Mapster interfaces.
