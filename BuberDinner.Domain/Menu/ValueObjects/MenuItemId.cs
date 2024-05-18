@@ -6,19 +6,13 @@ namespace BuberDinner.Domain.Menu.ValueObjects;
 // This value object ensures that each menu item can be uniquely identified and provides value-based equality.
 public sealed class MenuItemId : ValueObject
 {
-    // The actual GUID value representing the menu item ID.
-    public Guid Value { get; }
+    // The actual string value representing the menu item ID.
+    public string Value { get; }
 
     // Private constructor to enforce the use of the factory method for instantiation.
-    private MenuItemId(Guid value)
+    private MenuItemId(string itemName)
     {
-        Value = value;
-    }
-
-    // Factory method generates a new GUID to ensure that each MenuItemId is unique.
-    public static MenuItemId CreateUnique()
-    {
-        return new MenuItemId(Guid.NewGuid());
+        Value = $"Item_{itemName}";
     }
 
     // Overrides the GetEqualityComponents method to define the components that are used for equality comparison.
@@ -27,4 +21,13 @@ public sealed class MenuItemId : ValueObject
     {
         yield return Value;
     }
+
+    // Factory method to create a new MenuItemId.
+    // This method ensures that each MenuItemId is generated with a consistent format.
+    public static MenuItemId Create(string itemName)
+    {
+        // TODO: Add validation logic if necessary to ensure itemName is valid.
+        return new MenuItemId(itemName);
+    }
+
 }

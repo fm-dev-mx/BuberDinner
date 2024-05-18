@@ -4,7 +4,7 @@ using BuberDinner.Domain.Menu.ValueObjects;
 namespace BuberDinner.Domain.Menu.Entities;
 
 // Represents a section within a menu, which includes a collection of menu items.
-// Each MenuSection is uniquely identified by a MenuSectionId.
+// Each MenuSection is uniquely identified by a MenuSectionId and acts as an aggregate root.
 public sealed class MenuSection : Entity<MenuSectionId>
 {
     // A list of menu items within this section. This list is mutable internally but exposed as read-only externally.
@@ -21,18 +21,20 @@ public sealed class MenuSection : Entity<MenuSectionId>
 
     // Private constructor to initialize the MenuSection with a unique identifier, name, and description.
     // The constructor is private to enforce the use of the Create factory method for instantiation.
-    private MenuSection(MenuSectionId menuSectionId, string name, string description)
-        : base(menuSectionId)
+    private MenuSection(string name, string description, List<MenuItem> items, MenuSectionId? id = null)
+        : base(id ?? MenuSectionId.Create(name))
     {
         Name = name;
         Description = description;
+        _items = items;
     }
 
     // Factory method to create a new MenuSection with a unique identifier.
     // This method ensures that each MenuSection is instantiated with a unique MenuSectionId.
-    public static MenuSection Create(string name, string description)
+    // It also allows optional initialization of menu items.
+    public static MenuSection Create(string name, string description, List<MenuItem>? items = null)
     {
-        // Creates a new MenuSection instance using a unique MenuSectionId, name, and description.
-        return new MenuSection(MenuSectionId.CreateUnique(), name, description);
+        // Ensures a new MenuSection is created with the provided name, description, and optional items.
+        return new MenuSection(name, description, items ?? new());
     }
 }

@@ -13,10 +13,9 @@ public sealed class MenuItem : Entity<MenuItemId>
     // The description of the menu item.
     public string Description { get; }
 
-    // Private constructor to initialize the MenuItem with a unique identifier, name, and description.
-    // The constructor is private to enforce the use of the Create factory method for instantiation.
-    private MenuItem(MenuItemId menuItemId, string name, string description)
-        : base(menuItemId)
+    // Private constructor to enforce the use of the Create factory method for instantiation.
+    private MenuItem(string name, string description)
+        : base(MenuItemId.Create(name))
     {
         Name = name;
         Description = description;
@@ -26,7 +25,7 @@ public sealed class MenuItem : Entity<MenuItemId>
     // This method ensures that each MenuItem is instantiated with a unique MenuItemId.
     public static MenuItem Create(string name, string description)
     {
-        // Creates a new MenuItem instance using a unique MenuItemId, name, and description.
-        return new MenuItem(MenuItemId.CreateUnique(), name, description);
+        // TODO: Add validation logic if necessary to ensure name and description are valid.
+        return new MenuItem(name, description);
     }
 }
