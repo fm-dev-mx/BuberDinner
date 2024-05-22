@@ -60,7 +60,7 @@ public sealed class Reservation : Entity<ReservationId>
             guestId,
             guestCount,
             arrivalDateTime,
-            billId ?? BillId.CreateNew(), // Create a new BillId if not provided
+            billId ?? BillId.Create(dinnerId,guestId), // Create a new BillId if not provided
             status
         );
     }
