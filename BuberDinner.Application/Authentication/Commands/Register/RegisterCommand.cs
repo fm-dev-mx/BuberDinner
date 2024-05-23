@@ -9,8 +9,8 @@ public record RegisterCommand(
     string FirstName,
     string LastName,
     string Email,
-    string Password
-) : IRequest<ErrorOr<AuthenticationResult>>;
+    string Password) : IRequest<ErrorOr<AuthenticationResult>>;
+
 // Implements IRequest from MediatR. This CQRS pattern expects a response
 // wrapped in ErrorOr that indicates either the successful creation of an AuthenticationResult
 // or provides error details.

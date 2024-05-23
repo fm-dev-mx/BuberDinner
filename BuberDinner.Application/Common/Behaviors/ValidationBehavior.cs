@@ -29,20 +29,26 @@ public class ValidationBehavior<TRequest, TResponse> :
         CancellationToken cancellationToken)
     {
         // If no validator is set, bypass validation and forward the request directly to the next delegate.
-        if (_validator is null) return await next();
+        if (_validator is null)
+        {
+            return await next();
+        }
 
         // Validate the request, capturing the result to determine the next steps in the request handling pipeline.
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
 
         // If validation is successful, proceed to the next delegate in the pipeline.
-        if (validationResult.IsValid) return await next();
+        if (validationResult.IsValid)
+        {
+            return await next();
+        }
 
         // When validation is unsuccessful, transform each validation failure into an Error object
         // and aggregate these into a dynamic ErrorOr collection for consistent error handling.
         var errors = validationResult.Errors
-            .ConvertAll(ValidationFailure => Error.Validation(
-                ValidationFailure.PropertyName,
-                ValidationFailure.ErrorMessage))
+            .ConvertAll(validationFailure => Error.Validation(
+                validationFailure.PropertyName,
+                validationFailure.ErrorMessage))
             .ToList();
 
         /*

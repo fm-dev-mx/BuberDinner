@@ -8,6 +8,7 @@ public sealed class AverageRating : ValueObject
 {
     // The average rating value.
     public double Value { get; private set; }
+
     // The number of ratings contributing to the average.
     public int NumRatings { get; private set; }
 
@@ -33,18 +34,18 @@ public sealed class AverageRating : ValueObject
         Value = ((Value * NumRatings) + rating.Value) / ++NumRatings;
     }
 
+    // Overrides the GetEqualityComponents method to define the components that are used for equality comparison.
+    // This method ensures that AverageRatings are considered equal if their values match.
+    public override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+    }
+
     // Internal method to remove a rating from the average.
     // This method updates the average value and decrements the number of ratings.
     internal void RemoveRating(Rating rating)
     {
         // Updates the average rating by removing the rating value.
         Value = ((Value * NumRatings) - rating.Value) / --NumRatings;
-    }
-
-    // Overrides the GetEqualityComponents method to define the components that are used for equality comparison.
-    // This method ensures that AverageRatings are considered equal if their values match.
-    public override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
     }
 }

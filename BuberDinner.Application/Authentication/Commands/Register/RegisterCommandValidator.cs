@@ -9,7 +9,6 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
     // Constructor that initializes the RegisterCommandValidator by defining specific validation rules for each property.
     // These rules ensure that all inputs meet our application's requirements for data correctness and completeness.
-
     public RegisterCommandValidator()
     {
         RuleFor(x => x.FirstName).NotEmpty().WithMessage("First name is required.");

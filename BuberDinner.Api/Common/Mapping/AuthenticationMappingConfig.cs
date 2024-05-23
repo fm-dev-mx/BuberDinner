@@ -21,9 +21,10 @@ public class AuthenticationMappingConfig : IRegister
         // Used for processing user login requests.
         config.NewConfig<LoginRequest, LoginQuery>();
 
-        // Maps AuthenticationResult to AuthenticationResponse.
-        // Directly transfers user details to the response object.
+        // Maps properties from the AuthenticationResult to the AuthenticationResponse.
+        // Used for transferring user details to the response object.
         config.NewConfig<AuthenticationResult, AuthenticationResponse>()
+            .Map(dest => dest.Id, src => src.User.Id.Value)
             .Map(dest => dest, src => src.User);
     }
 }

@@ -12,11 +12,13 @@ public static class DependencyInjection
     {
         // Set up global configuration for Mapster, a library for mapping objects.
         var config = TypeAdapterConfig.GlobalSettings;
+
         // Automatically finds and registers all Mapster mappings in this assembly.
         config.Scan(Assembly.GetExecutingAssembly());
 
         // Add the configuration to the services as a single instance shared across the app.
         services.AddSingleton(config);
+
         // Add a mapper service that can be used to map objects in the app.
         services.AddScoped<IMapper, ServiceMapper>();
 

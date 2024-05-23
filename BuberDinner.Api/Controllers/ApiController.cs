@@ -15,10 +15,16 @@ public class ApiController : ControllerBase
     protected IActionResult Problem(List<Error> errors)
     {
         // If there are no errors, return a generic server error.
-        if (errors.Count is 0) return Problem();
+        if (errors.Count is 0)
+        {
+            return Problem();
+        }
 
         // If all errors are validation types, return a validation problem response.
-        if (errors.All(error => error.Type == ErrorType.Validation)) return ValidationProblem(errors);
+        if (errors.All(error => error.Type == ErrorType.Validation))
+        {
+            return ValidationProblem(errors);
+        }
 
         // Store errors in HttpContext for further processing or logging.
         HttpContext.Items[HttpContextItemKeys.Errors] = errors;

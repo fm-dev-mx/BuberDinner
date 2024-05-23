@@ -14,6 +14,7 @@ namespace BuberDinner.Api.Controllers;
 // Endpoints for user authentication.
 // The authentication process involves registering a new user or logging in with an existing account.
 [Route("auth")]
+
 // Allows anonymous access to authentication endpoints.
 [AllowAnonymous]
 public class AuthenticationController : ApiController
@@ -34,14 +35,14 @@ public class AuthenticationController : ApiController
     {
         // Map the DTO to the RegisterCommand for MediatR handling.
         var command = _mapper.Map<RegisterCommand>(request);
+
         // Send command to MediatR and wait for a result, which is either an AuthenticationResult or a list of errors.
         ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
 
         // Handle the result: if successful, map the result to a response DTO and return an OK status; if failed, return a problem detail.
         return authResult.Match(
             authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
-            errors => Problem(errors)
-        );
+            errors => Problem(errors));
     }
 
     // HTTP POST method for user login.
@@ -50,6 +51,7 @@ public class AuthenticationController : ApiController
     {
         // Map the DTO to the LoginQuery for MediatR handling.
         var query = _mapper.Map<LoginQuery>(request);
+
         // Send query to MediatR and wait for a result.
         var authResult = await _mediator.Send(query);
 
@@ -60,10 +62,10 @@ public class AuthenticationController : ApiController
                 statusCode: StatusCodes.Status401Unauthorized,
                 title: authResult.FirstError.Description);
         }
+
         // Handle the result: if successful, map the result to a response DTO and return an OK status; if failed, return a problem detail.
         return authResult.Match(
             authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
-            errors => Problem(errors)
-        );
+            errors => Problem(errors));
     }
 }

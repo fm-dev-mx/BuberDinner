@@ -15,7 +15,6 @@ public static partial class Errors
         // returned from API endpoints to indicate the specific nature of the authentication failure.
         public static Error InvalidCredentials => Error.Validation(
             code: "Auth.InvalidCredentials", // Unique error code for identifying the error type.
-            description: "Invalid credentials." // Description that explains what the error is about.
-        );
+            description: "Invalid credentials."); // Description that explains what the error is about.
     }
 }

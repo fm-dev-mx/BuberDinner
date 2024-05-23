@@ -50,6 +50,7 @@ public static class DependencyInjection
         // Adds JWT Bearer authentication to the request pipeline.
         services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
+
                 // Validates the issuer, audience, lifetime, and signing key of the incoming token.
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -66,9 +67,8 @@ public static class DependencyInjection
 
                     // Defines the encryption key that must be used to validate the token.
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtSettings.Secret))
-                }
-            );
+                        Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+                });
 
         return services;
     }

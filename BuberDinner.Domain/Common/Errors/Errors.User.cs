@@ -15,7 +15,6 @@ public static partial class Errors
         // as it would violate the uniqueness constraint of email addresses.
         public static Error DuplicateEmail => Error.Conflict(
             code: "User.DuplicateEmail", // Unique error code that can be used for identifying the error type in client-side logic or logs.
-            description: "Email already exists" // Descriptive message that explains the nature of the error to the end-user or developer.
-        );
+            description: "Email already exists"); // Descriptive message that explains the nature of the error to the end-user or developer.
     }
 }

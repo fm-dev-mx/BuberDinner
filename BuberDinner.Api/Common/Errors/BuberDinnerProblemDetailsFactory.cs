@@ -106,7 +106,8 @@ public class BuberDinnerProblemDetailsFactory : ProblemDetailsFactory
 
         // Add error codes from HttpContext if available, useful for debugging and detailed error responses.
         var errors = httpContext?.Items[HttpContextItemKeys.Errors] as List<Error>;
-        if(errors is not null)
+
+        if (errors is not null)
         {
             problemDetails.Extensions.Add("errorCodes", errors.Select(e => e.Code));
         }

@@ -2,7 +2,7 @@ using BuberDinner.Application.Authentication.Common;
 using BuberDinner.Application.Common.Interfaces.Authentication;
 using BuberDinner.Application.Common.Interfaces.Persistence;
 using BuberDinner.Domain.Common.Errors;
-using BuberDinner.Domain.Entities;
+using BuberDinner.Domain.UserAggregate;
 using ErrorOr;
 using MediatR;
 
@@ -47,7 +47,6 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<Authenticat
         // Return a successful authentication result containing the user and the new JWT token.
         return new AuthenticationResult(
             user,
-            token
-        );
+            token);
     }
 }
