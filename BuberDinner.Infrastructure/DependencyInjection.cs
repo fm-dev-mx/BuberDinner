@@ -2,6 +2,7 @@ using System.Text;
 using BuberDinner.Application.Common.Interfaces.Authentication;
 using BuberDinner.Application.Common.Interfaces.Persistence;
 using BuberDinner.Application.Common.Interfaces.Services;
+using BuberDinner.Domain.MenuAggregate;
 using BuberDinner.Infrastructure.Authentication;
 using BuberDinner.Infrastructure.Persistence;
 using BuberDinner.Infrastructure.Services;
@@ -20,38 +21,47 @@ public static class DependencyInjection
     // ConfigurationManager is used to pass configuration settings into services.
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager configuration)
     {
-        // Adds JWT Bearer authentication to the request pipeline.
-        // Reads configuration settings for the JWT token from the appsettings.json file.
-        services.AddAuth(configuration);
+        // Configures authentication and persistence services.
+        services
+            .AddAuth(configuration)
+            .AddPersistence();
 
         // Registers the DateTimeProvider as a singleton to ensure a consistent date-time source across the application.
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
+        return services;
+    }
+
+    // Registers persistence services to the DI container.
+    public static IServiceCollection AddPersistence(this IServiceCollection services)
+    {
         // Registers the UserRepository as a scoped service to handle user data management.
-        // Scoped lifetime ensures that a new instance is created for each request, suitable for handling user data context.
+        // Scoped lifetime ensures a new instance for each request.
         services.AddScoped<IUserRepository, UserRepository>();
+
+        // Registers the MenuRepository as a scoped service to handle menu data management.
+        // Scoped lifetime ensures a new instance for each request.
+        services.AddScoped<IMenuRepository, MenuRepository>();
 
         return services;
     }
 
+    // Configures authentication services and JWT settings.
     public static IServiceCollection AddAuth(this IServiceCollection services, ConfigurationManager configuration)
     {
-        // Registers the JwtSettings as a singleton to ensure a single instance handles all JWT settings throughout the application's lifetime.
+        // Binds JWT settings from the configuration to the JwtSettings class.
         var jwtSettings = new JwtSettings();
         configuration.Bind(JwtSettings.SectionName, jwtSettings);
-
-        // Configure JwtSettings from the app settings and bind it to the JwtSettings class.
-        // This enables the JwtTokenGenerator to retrieve its settings from the IConfiguration instance.
         services.AddSingleton(Options.Create(jwtSettings));
 
-        // Registers the JwtTokenGenerator as a singleton to ensure a single instance handles all JWT creation throughout the application's lifetime.
+        // Registers the JwtTokenGenerator as a singleton to ensure a single instance handles all JWT creation.
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
         // Adds JWT Bearer authentication to the request pipeline.
         services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
 
-                // Validates the issuer, audience, lifetime, and signing key of the incoming token.
+                // Configures token validation parameters.
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
